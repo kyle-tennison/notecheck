@@ -7,7 +7,14 @@ authors = [
     { name = "Kyle Tennison", email = "kyletennison05@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "loguru>=0.7.3",
+    "openai>=1.73.0",
+    "typer>=0.15.2",
+]
+
+[project.scripts]
+notecheck = "note_checker.cli.__main__:main"
 
 [build-system]
 requires = ["hatchling"]
