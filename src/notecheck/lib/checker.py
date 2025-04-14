@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 import re
 from loguru import logger
-from note_checker.lib.prompts import GRAMMAR_INSTRUCTION, AUDIT_INSTRUCTION
+from notecheck.lib.prompts import GRAMMAR_INSTRUCTION, AUDIT_INSTRUCTION
 from openai import OpenAI, RateLimitError
-from note_checker.lib.util import backoff_on_exception
+from notecheck.lib.util import backoff_on_exception
 
 IGNORE_PATTERNS = [r".*\.excalidraw\.md$"]
 CACHE_FILE = Path(__file__).parent.parent.parent.parent / "cache.txt"

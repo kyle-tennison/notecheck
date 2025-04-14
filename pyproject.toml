@@ -1,7 +1,7 @@
 [project]
-name = "note-checker"
+name = "notecheck"
 version = "0.1.0"
-description = "Add your description here"
+description = "Markdown note proofreading with OpenAI LLMs"
 readme = "README.md"
 authors = [
     { name = "Kyle Tennison", email = "kyletennison05@gmail.com" }
@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-notecheck = "note_checker.cli.__main__:main"
+notecheck = "notecheck.cli.__main__:main"
 
 [build-system]
 requires = ["hatchling"]

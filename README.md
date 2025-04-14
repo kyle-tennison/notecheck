@@ -46,7 +46,7 @@ $$\bar c_v = \sum_i y_i \bar c_{v,i} \quad \text{and} \quad \bar c_p = \sum_i y_
 
 Remember that:
 
-$$\bar c_v = \bar c_p + \bar R \tag{ideal gas}$$
+$$\bar c_v = \bar c_p + \bar R $$
 
 > 🤖 (notecheck comment) — For an ideal gas, the correct relationship is $c_p = c_v + R$, not $c_v = c_p + R$.
 
