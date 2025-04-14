@@ -1,7 +1,7 @@
 [project]
-name = "note-checker"
+name = "notecheck"
 version = "0.1.0"
-description = "Add your description here"
+description = "Markdown note proofreading with OpenAI LLMs"
 readme = "README.md"
 authors = [
     { name = "Kyle Tennison", email = "kyletennison05@gmail.com" }
