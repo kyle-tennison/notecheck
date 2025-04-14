@@ -11,5 +11,8 @@ uv.lock
 .venv
 .vscode
 
+# Machine-Specific
+cache.txt
+
 # Sensitive
 .env
