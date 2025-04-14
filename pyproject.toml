@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-notecheck = "note_checker.cli.__main__:main"
+notecheck = "notecheck.cli.__main__:main"
 
 [build-system]
 requires = ["hatchling"]

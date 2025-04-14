@@ -2,7 +2,7 @@ from pathlib import Path
 from typer import Option
 import typer
 from loguru import logger
-from note_checker.lib.checker import NoteChecker
+from notecheck.lib.checker import NoteChecker
 
 
 app = typer.Typer(pretty_exceptions_enable=False)
