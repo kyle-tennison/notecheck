@@ -5,7 +5,7 @@ from loguru import logger
 from note_checker.lib.checker import NoteChecker
 
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 
 
 @app.command()

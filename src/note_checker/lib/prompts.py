@@ -4,8 +4,12 @@ from textwrap import dedent
 GRAMMAR_INSTRUCTION = dedent("""
 Consider the following markdown document from obsidian. Fix any **major** 
 spelling/grammar errors. Do **not** make any significant changes to the content 
-of the document beyond small phrasing changes. If there are no changes to be
-made, that is perfectly acceptable; in this case, respond with an unmodified document.
+of the document beyond small grammar changes. 
+                             
+**Do not modify latex equations** unless a `\\text{}` field has a typo.
+                             
+If there are no changes to be made, that is perfectly acceptable; in this case, 
+respond with an unmodified document.
                         
 Respond with the modified document in Markdown. Your response should **only** contain
 the modified markdown; do not provide any additional comments. 
@@ -42,6 +46,8 @@ $$a^2+b^2=c^3$$
 ```
                            
 This is a trivial example; some error may be more complex so carefully analyze the document.
+If the content is even *slightly* subjective, don't add a comment. You should only
+place these comments when there is a definite error.
 
 Respond with the modified document. If no modificiations are necessary, respond with
 the origional document. The *only* changes should be the added comments. In other

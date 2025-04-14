@@ -1,13 +1,18 @@
 
+from concurrent.futures import ThreadPoolExecutor
 import os
 from pathlib import Path
 import re
+import time
 from loguru import logger
 from note_checker.lib.prompts import GRAMMAR_INSTRUCTION, AUDIT_INSTRUCTION
-from openai import OpenAI
+from openai import OpenAI, RateLimitError
 from tqdm import tqdm
+from note_checker.lib.util import backoff_on_exception
 
 IGNORE_PATTERNS = [r'.*\.excalidraw\.md$']
+CACHE_FILE = Path(__file__).parent.parent.parent.parent / "cache.txt"
+CACHE_FILE.touch()
 
 class NoteChecker:
 
@@ -30,7 +35,7 @@ class NoteChecker:
         file_content = file.read_text()
 
         modified_content = self.openai.responses.create(
-            model="o1",
+            model="o3-mini",
             instructions=AUDIT_INSTRUCTION,
             input=file_content,
         ).output_text
@@ -40,20 +45,26 @@ class NoteChecker:
 
 
     def process(self):
-        files = list(self.notes_root.rglob("*.md"))
-        pbar = tqdm(files, desc="Starting", unit="file")
-        i = 0
 
-        for file in pbar:
-            # Skip files that match ignore patterns
-            if any(re.compile(pat).fullmatch(str(file)) for pat in IGNORE_PATTERNS):
-                continue
+        @backoff_on_exception(RateLimitError)
+        def task(file: Path):
 
-            # Update progress bar description with the current file name
-            pbar.set_description(f"Processing: {file.name}")
-            self.proofread_file(file)
-            self.audit_file(file)
+            if not file.read_text().strip():
+                return
 
-            i += 1
-            if i > 10:
-                break
+            if str(file.resolve()) in CACHE_FILE.read_text().splitlines():
+                logger.debug(f"File {file} was cached")
+            else:
+                logger.info(f"Processing {file}")
+                self.proofread_file(file)
+                self.audit_file(file)
+                CACHE_FILE.write_text(CACHE_FILE.read_text() + f"\n{file.resolve()}")
+
+        files = [
+            file for file in self.notes_root.rglob("*.md")
+            if not any(re.compile(pat).fullmatch(str(file)) for pat in IGNORE_PATTERNS)
+        ]
+
+        for file in files:
+            task(file)
+
