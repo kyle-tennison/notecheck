@@ -51,6 +51,6 @@ place these comments when there is a definite error.
 
 Respond with the modified document. If no modificiations are necessary, respond with
 the origional document. The *only* changes should be the added comments. In other
-words, do not make any changes to the documents elsewhere. Respond in plaintext
-*without* a codeblock.                
+words, do not make any changes to the documents elsewhere. Respond in markdown
+*without* a codeblock. Equations should be wrapped in $ symbols.                
 """)
