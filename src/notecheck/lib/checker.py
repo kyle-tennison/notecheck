@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 import re
 from dotenv import load_dotenv
@@ -12,6 +11,7 @@ CACHE_FILE = Path(__file__).parent.parent.parent.parent / "cache.txt"
 CACHE_FILE.touch()
 
 load_dotenv()
+
 
 class NoteChecker:
     """
