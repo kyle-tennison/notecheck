@@ -13,6 +13,7 @@ uv.lock
 
 # Machine-Specific
 cache.txt
+.DS_Store
 
 # Sensitive
 .env

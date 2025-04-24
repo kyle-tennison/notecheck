@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import re
+from dotenv import load_dotenv
 from loguru import logger
 from notecheck.lib.prompts import GRAMMAR_INSTRUCTION, AUDIT_INSTRUCTION
 from openai import OpenAI, RateLimitError
@@ -10,6 +11,7 @@ IGNORE_PATTERNS = [r".*\.excalidraw\.md$"]
 CACHE_FILE = Path(__file__).parent.parent.parent.parent / "cache.txt"
 CACHE_FILE.touch()
 
+load_dotenv()
 
 class NoteChecker:
     """
@@ -24,7 +26,7 @@ class NoteChecker:
             notes_root (Path): The root directory containing markdown note files.
         """
         self.notes_root = notes_root.expanduser().absolute()
-        self.openai = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        self.openai = OpenAI()
 
     def proofread_file(self, file: Path):
         """
