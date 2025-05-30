@@ -12,7 +12,7 @@ uv.lock
 .vscode
 
 # Machine-Specific
-cache.txt
+.notecheck_cache
 .DS_Store
 
 # Sensitive

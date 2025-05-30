@@ -1,16 +1,27 @@
+from hashlib import md5
 from pathlib import Path
+import pickle
 import re
 from dotenv import load_dotenv
 from loguru import logger
+from pydantic import BaseModel
 from notecheck.lib.prompts import GRAMMAR_INSTRUCTION, AUDIT_INSTRUCTION
 from openai import OpenAI, RateLimitError
 from notecheck.lib.util import backoff_on_exception
 
 IGNORE_PATTERNS = [r".*\.excalidraw\.md$"]
-CACHE_FILE = Path(__file__).parent.parent.parent.parent / "cache.txt"
-CACHE_FILE.touch()
+CACHE_FILE = Path(__file__).parent.parent.parent.parent / ".notecheck_cache"
 
 load_dotenv()
+
+
+class FileData(BaseModel):
+    path: Path
+    md5: bytes
+
+
+class FileCache(BaseModel):
+    files: list[FileData]
 
 
 class NoteChecker:
@@ -27,6 +38,12 @@ class NoteChecker:
         """
         self.notes_root = notes_root.expanduser().absolute()
         self.openai = OpenAI()
+
+        if CACHE_FILE.exists():
+            with CACHE_FILE.open("rb") as f:
+                self.file_cache: FileCache = pickle.load(f)
+        else:
+            self.file_cache = FileCache(files=[])
 
     def proofread_file(self, file: Path):
         """
@@ -81,13 +98,20 @@ class NoteChecker:
             if not file.read_text().strip():
                 return
 
-            if str(file.resolve()) in CACHE_FILE.read_text().splitlines():
+            cached_data: FileData | None = next(
+                (f for f in self.file_cache.files if file.resolve() == f.path), None
+            )
+
+            if cached_data and cached_data.md5 == md5(file.read_bytes()).digest():
                 logger.debug(f"File {file} was cached")
             else:
                 logger.info(f"Processing {file}")
                 self.proofread_file(file)
                 self.audit_file(file)
-                CACHE_FILE.write_text(CACHE_FILE.read_text() + f"\n{file.resolve()}")
+
+                self.file_cache.files.append(
+                    FileData(path=file.resolve(), md5=md5(file.read_bytes()).digest())
+                )
 
         files = [
             file
@@ -97,3 +121,7 @@ class NoteChecker:
 
         for file in files:
             task(file)
+
+        # write cache to file
+        with CACHE_FILE.open("wb") as f:
+            pickle.dump(self.file_cache, f)
