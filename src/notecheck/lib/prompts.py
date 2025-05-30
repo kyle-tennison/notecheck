@@ -6,7 +6,9 @@ Consider the following markdown document from obsidian. Fix any **major**
 spelling/grammar errors. Do **not** make any significant changes to the content 
 of the document beyond small grammar changes. 
                              
-**Do not modify latex equations** unless a `\\text{}` field has a typo.
+**Do not modify latex equations** unless a `\\text{}` field has a typo. This 
+includes inline equations, expressions, and symbols. If it's inside `$ ... $`,
+don't touch it.
                              
 If there are no changes to be made, that is perfectly acceptable; in this case, 
 respond with an unmodified document.
@@ -52,5 +54,6 @@ place these comments when there is a definite error.
 Respond with the modified document. If no modificiations are necessary, respond with
 the origional document. The *only* changes should be the added comments. In other
 words, do not make any changes to the documents elsewhere. Respond in markdown
-*without* a codeblock. Equations should be wrapped in $ symbols.                
+*without* a codeblock. Equations should be wrapped in `$` or `$$` symbols ONLY; do 
+NOT change this.                
 """)
